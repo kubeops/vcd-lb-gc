@@ -1,3 +1,19 @@
+/*
+Copyright AppsCode Inc. and Contributors
+
+Licensed under the AppsCode Free Trial License 1.0.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://github.com/appscode/licenses/raw/1.0.0/AppsCode-Free-Trial-1.0.0.md
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 // vcd-lb-gc is a Kubernetes controller that garbage-collects orphaned
 // VMware Cloud Director load-balancer objects (virtual services, pools,
 // DNAT rules) left behind by cloud-provider-for-cloud-director when a port
@@ -17,15 +33,15 @@ import (
 	"syscall"
 	"time"
 
+	"kubeops.dev/vcd-lb-gc/pkg/gc"
+	"kubeops.dev/vcd-lb-gc/pkg/vcd"
+
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/tools/leaderelection"
 	"k8s.io/client-go/tools/leaderelection/resourcelock"
 	"k8s.io/klog/v2"
-
-	"kubeops.dev/vcd-lb-gc/pkg/gc"
-	"kubeops.dev/vcd-lb-gc/pkg/vcd"
 )
 
 func main() {
@@ -38,11 +54,11 @@ func main() {
 		vcdPass     = flag.String("vcd-password", env("VCD_PASSWORD", ""), "VCD tenant password")
 		vcdInsec    = flag.Bool("vcd-insecure", false, "Skip TLS verification when talking to VCD")
 
-		clusterID  = flag.String("cluster-id", env("CLUSTER_ID", ""), `CPI cluster ID, e.g. "capvcdCluster:<uuid>"`)
-		edgeGwID   = flag.String("edge-gateway-id", env("EDGE_GATEWAY_ID", ""), `URN of the edge gateway hosting the LB, e.g. urn:vcloud:gateway:<uuid>`)
-		interval   = flag.Duration("interval", 60*time.Second, "Reconcile interval")
-		dryRun     = flag.Bool("dry-run", false, "Log orphans without deleting")
-		skipDNAT   = flag.Bool("skip-dnat", false, "Skip DNAT cleanup (set when enableVirtualServiceSharedIP is on)")
+		clusterID = flag.String("cluster-id", env("CLUSTER_ID", ""), `CPI cluster ID, e.g. "capvcdCluster:<uuid>"`)
+		edgeGwID  = flag.String("edge-gateway-id", env("EDGE_GATEWAY_ID", ""), `URN of the edge gateway hosting the LB, e.g. urn:vcloud:gateway:<uuid>`)
+		interval  = flag.Duration("interval", 60*time.Second, "Reconcile interval")
+		dryRun    = flag.Bool("dry-run", false, "Log orphans without deleting")
+		skipDNAT  = flag.Bool("skip-dnat", false, "Skip DNAT cleanup (set when enableVirtualServiceSharedIP is on)")
 
 		kubeconfig = flag.String("kubeconfig", env("KUBECONFIG", defaultKubeconfig()), "Path to kubeconfig (in-cluster if empty and run inside a pod)")
 		leaderNS   = flag.String("leader-namespace", env("POD_NAMESPACE", "kube-system"), "Namespace for the leader-election Lease")

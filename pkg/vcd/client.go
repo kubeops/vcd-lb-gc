@@ -1,3 +1,19 @@
+/*
+Copyright AppsCode Inc. and Contributors
+
+Licensed under the AppsCode Free Trial License 1.0.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://github.com/appscode/licenses/raw/1.0.0/AppsCode-Free-Trial-1.0.0.md
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 // Package vcd is a minimal OpenAPI client for VMware Cloud Director, scoped
 // to the load-balancer and edge-gateway NAT endpoints needed by the GC.
 package vcd
@@ -34,9 +50,9 @@ type Client struct {
 	cfg  Config
 	http *http.Client
 
-	mu        sync.Mutex
-	token     string
-	tokenExp  time.Time
+	mu       sync.Mutex
+	token    string
+	tokenExp time.Time
 }
 
 func New(cfg Config) *Client {
@@ -159,11 +175,11 @@ type NamedRef struct {
 }
 
 type VirtualService struct {
-	ID              string    `json:"id"`
-	Name            string    `json:"name"`
-	GatewayRef      NamedRef  `json:"gatewayRef"`
+	ID                  string   `json:"id"`
+	Name                string   `json:"name"`
+	GatewayRef          NamedRef `json:"gatewayRef"`
 	LoadBalancerPoolRef NamedRef `json:"loadBalancerPoolRef"`
-	VirtualIPAddress string `json:"virtualIpAddress"`
+	VirtualIPAddress    string   `json:"virtualIpAddress"`
 }
 
 type Pool struct {
@@ -173,9 +189,9 @@ type Pool struct {
 }
 
 type NATRule struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
-	RuleType   string `json:"ruleType"`
+	ID                string `json:"id"`
+	Name              string `json:"name"`
+	RuleType          string `json:"ruleType"`
 	ExternalAddresses string `json:"externalAddresses"`
 	InternalAddresses string `json:"internalAddresses"`
 	DnatExternalPort  string `json:"dnatExternalPort,omitempty"`
