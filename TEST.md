@@ -237,4 +237,4 @@ kubectl delete -f examples/deploy-a.yaml -f examples/deploy-b.yaml
 Deleting `lb-test` cleans up its remaining (`-http`) VCD objects. If any
 `-http-alt` orphans predate the controller and survive — e.g. created before
 RBAC/rights were granted — fall back to the manual cleanup recipe in
-[`DESIGN.md`](DESIGN.md) §5.
+[`poc/findings.md` §5](poc/findings.md#5-manual-cleanup-recipe-for-existing-orphans).

@@ -6,7 +6,7 @@ bug where incremental port removal from a `Service` of type `LoadBalancer`
 does **not** clean up the corresponding VCD virtual service, pool, and DNAT
 rule.
 
-See [`DESIGN.md`](DESIGN.md) for the upstream bug references
+See [`poc/findings.md`](poc/findings.md) for the upstream bug references
 ([#336](https://github.com/vmware/cloud-provider-for-cloud-director/issues/336)
 and the Known Issue in CPI 1.3–1.6.1 release notes).
 
@@ -81,10 +81,10 @@ controller cleans it up — local build checks plus a full end-to-end run.
 ## Caveats
 
 - This is a workaround, not a fix. The upstream CPI repo was archived
-  2026-01-20; see [`DESIGN.md`](DESIGN.md).
+  2026-01-20; see [`poc/findings.md`](poc/findings.md).
 - The controller assumes one CPI-managed cluster per deployment instance.
   For multiple clusters, run one Deployment per cluster with distinct
   `--cluster-id` and `--leader-name`.
 - If your tenant lacks LB + NAT write rights via the OpenAPI, deletions
   will return 403 — fall back to the manual cleanup recipe in
-  [`DESIGN.md`](DESIGN.md).
+  [`poc/findings.md`](poc/findings.md).
