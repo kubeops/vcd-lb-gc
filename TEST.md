@@ -203,14 +203,13 @@ deleting on a steady-state cluster is misconfigured (wrong `--cluster-id` or
 After the out-of-cluster run passes, validate the real deployment path:
 
 ```bash
-kubectl apply -f deploy/rbac.yaml
-
-# Fill deploy/secret.example.yaml -> secret.yaml (see args.md), then:
-kubectl apply -f deploy/secret.yaml
-
-# deploy/deployment.yaml ships with --dry-run=true and 2 replicas + leader election.
-# Set --cluster-id / --edge-gateway-id to your values first.
-kubectl apply -f deploy/deployment.yaml
+# The chart (kubeops/installer charts/vcd-lb-gc) ships with config.dryRun=true
+# and 2 replicas + leader election. Set the VCD creds and IDs (see args.md).
+helm upgrade -i vcd-lb-gc appscode/vcd-lb-gc -n vcd --create-namespace \
+  --set vcd.endpoint=https://vcd.example.com \
+  --set vcd.org=<org> --set vcd.user=<user> --set vcd.password=<password> \
+  --set config.clusterID=capvcdCluster:<uuid> \
+  --set config.edgeGatewayID=urn:vcloud:gateway:<uuid>
 
 kubectl -n vcd logs deploy/vcd-lb-gc -f
 ```
@@ -220,16 +219,16 @@ Checks:
 - **Leader election** — with 2 replicas, exactly one pod logs `vcd-lb-gc starting`
   and reconciles; the other waits. Delete the leader pod and confirm the standby
   takes over within ~30s (the Lease duration).
-- **Dry-run first** — the deployed manifest defaults to `--dry-run=true`. Confirm
-  the logged plan matches expectations, then remove `--dry-run=true` and reapply
-  to enable real deletions.
+- **Dry-run first** — the chart defaults to `config.dryRun=true`. Confirm the
+  logged plan matches expectations, then set `config.dryRun=false` and upgrade
+  the release to enable real deletions.
 
 ---
 
 ## Teardown
 
 ```bash
-kubectl delete -f deploy/deployment.yaml -f deploy/secret.yaml -f deploy/rbac.yaml
+helm uninstall vcd-lb-gc -n vcd
 kubectl delete svc lb-test -n vcd
 kubectl delete -f examples/deploy-a.yaml -f examples/deploy-b.yaml
 ```

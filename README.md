@@ -45,21 +45,24 @@ See [`args.md`](args.md) for all flags, secret values, and how to extract them f
 
 ## Deploy
 
+The controller ships as a Helm chart in the
+[`kubeops/installer`](https://github.com/kubeops/installer) repo
+(`charts/vcd-lb-gc`). It starts with `config.dryRun=true` and 2 replicas +
+leader election.
+
 ```bash
-kubectl apply -f deploy/rbac.yaml
-
-# Fill in deploy/secret.example.yaml → secret.yaml, then:
-kubectl apply -f deploy/secret.yaml
-
-# Edit deploy/deployment.yaml: set --cluster-id and --edge-gateway-id to your values.
-kubectl apply -f deploy/deployment.yaml
+helm upgrade -i vcd-lb-gc appscode/vcd-lb-gc -n vcd --create-namespace \
+  --set vcd.endpoint=https://vcd.example.com \
+  --set vcd.org=<org> --set vcd.user=<user> --set vcd.password=<password> \
+  --set config.clusterID=capvcdCluster:<uuid> \
+  --set config.edgeGatewayID=urn:vcloud:gateway:<uuid>
 
 # Watch the dry-run output before flipping it off.
 kubectl -n vcd logs deploy/vcd-lb-gc -f
 ```
 
-Once the dry-run logs match what you expect to delete, remove `--dry-run=true`
-from `deploy/deployment.yaml` and reapply.
+Once the dry-run logs match what you expect to delete, set `config.dryRun=false`
+and upgrade the release.
 
 ## Test
 

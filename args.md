@@ -4,7 +4,7 @@ All values below are for the **kube22-dbaas01** cluster (`vcloud-ccm-configmap`)
 
 ---
 
-## Secret (`deploy/secret.yaml`)
+## Secret (`vcd.*` chart values)
 
 | Key | Value | How to find |
 |-----|-------|-------------|
@@ -15,7 +15,7 @@ All values below are for the **kube22-dbaas01** cluster (`vcloud-ccm-configmap`)
 
 ---
 
-## Deployment flags (`deploy/deployment.yaml`)
+## Deployment flags (`config.*` chart values)
 
 | Flag | Value | How to find |
 |------|-------|-------------|
@@ -37,4 +37,4 @@ urn:vcloud:entity:vmware:capvcdCluster:bc77c367-851b-4bd6-b879-8832657025d8
 The CPI embeds only `capvcdCluster:<uuid>` in VCD object names, so the GC `--cluster-id` must use that shorter form. Before flipping `--dry-run=false`, open the VCD UI → Networking → Virtual Services and confirm that an existing VS name contains `capvcdCluster:bc77c367-851b-4bd6-b879-8832657025d8` (and not the full URN).
 
 ### edge-gateway-id
-This value is not stored anywhere in the Kubernetes cluster. Source it from the VCD portal or ask the cloud tenant admin. The value already in `deploy/deployment.yaml` (`urn:vcloud:gateway:cb64f385-38ee-4a1f-b954-866e087a5094`) was set manually during initial setup.
+This value is not stored anywhere in the Kubernetes cluster. Source it from the VCD portal or ask the cloud tenant admin. The value used during initial setup (`config.edgeGatewayID=urn:vcloud:gateway:cb64f385-38ee-4a1f-b954-866e087a5094`) was set manually.
