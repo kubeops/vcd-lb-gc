@@ -23,7 +23,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
 
-	"kubedb.dev/vcd-lb-gc/pkg/vcd"
+	"kubeops.dev/vcd-lb-gc/pkg/vcd"
 )
 
 type Options struct {
@@ -158,7 +158,7 @@ func (r *Reconciler) expectedNames(ctx context.Context) (map[string]struct{}, er
 // portKey mirrors the CPI's port-name selection: it uses ServicePort.Name when set,
 // otherwise falls back to the protocol-port combo. Keep this in sync with how
 // your CPI deployment generates names — verify against an existing live VS name
-// before enabling --apply.
+// before disabling --dry-run.
 func portKey(p corev1.ServicePort) string {
 	if p.Name != "" {
 		return p.Name

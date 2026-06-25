@@ -24,8 +24,8 @@ import (
 	"k8s.io/client-go/tools/leaderelection/resourcelock"
 	"k8s.io/klog/v2"
 
-	"kubedb.dev/vcd-lb-gc/pkg/gc"
-	"kubedb.dev/vcd-lb-gc/pkg/vcd"
+	"kubeops.dev/vcd-lb-gc/pkg/gc"
+	"kubeops.dev/vcd-lb-gc/pkg/vcd"
 )
 
 func main() {

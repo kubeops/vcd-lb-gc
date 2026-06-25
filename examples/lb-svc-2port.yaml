@@ -1,0 +1,21 @@
+# lb-test v2 — two ports (http:80 + http-alt:8080). The CPI creates a VS, pool,
+# and DNAT rule per port. The selector stays app-a on purpose; http-alt has no
+# backing pod, matching the original repro in poc/report.md.
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb-test
+  namespace: vcd
+spec:
+  type: LoadBalancer
+  selector:
+    app: app-a
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  - name: http-alt
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
