@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vcd-lb-gc
-  namespace: default
+  namespace: vcd
   labels: { app: vcd-lb-gc }
 spec:
   # Two replicas + leader election: one active, one hot standby.
@@ -44,4 +44,6 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
+            runAsUser: 65532
+            runAsGroup: 65532
             capabilities: { drop: ["ALL"] }
