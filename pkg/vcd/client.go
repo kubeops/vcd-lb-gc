@@ -84,7 +84,7 @@ func (c *Client) login(ctx context.Context) error {
 	if err != nil {
 		return fmt.Errorf("vcd login: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func(rc io.Closer) { _ = rc.Close() }(resp.Body)
 	if resp.StatusCode/100 != 2 {
 		body, _ := io.ReadAll(resp.Body)
 		return fmt.Errorf("vcd login: status %d: %s", resp.StatusCode, string(body))
@@ -130,7 +130,7 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 	if err != nil {
 		return fmt.Errorf("%s %s: %w", method, path, err)
 	}
-	defer resp.Body.Close()
+	defer func(rc io.Closer) { _ = rc.Close() }(resp.Body)
 	if resp.StatusCode == http.StatusUnauthorized {
 		// token expired between login and now — drop and retry once.
 		c.mu.Lock()
@@ -147,7 +147,7 @@ func (c *Client) do(ctx context.Context, method, path string, query url.Values, 
 		if err != nil {
 			return fmt.Errorf("%s %s (retry): %w", method, path, err)
 		}
-		defer resp.Body.Close()
+		defer func(rc io.Closer) { _ = rc.Close() }(resp.Body)
 	}
 	if resp.StatusCode/100 != 2 {
 		b, _ := io.ReadAll(resp.Body)
