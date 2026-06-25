@@ -36,24 +36,13 @@ Two replicas run with leader election so only one reconciles at a time.
 cd vcd-lb-gc
 go mod tidy
 go build ./...
-docker build -t ghcr.io/kubedb/vcd-lb-gc:latest .
+docker build -t ghcr.io/arnobkumarsaha/vcd-lb-gc:latest .
+docker push ghcr.io/arnobkumarsaha/vcd-lb-gc:latest
 ```
 
 ## Configure
 
-| Flag / env | Required | Notes |
-|---|---|---|
-| `--vcd-endpoint` / `VCD_ENDPOINT` | yes | `https://vcd.example.com` |
-| `--vcd-org` / `VCD_ORG` | yes | Tenant org, e.g. `dbaas` |
-| `--vcd-user` / `VCD_USER` | yes | Tenant user with LB + NAT write rights |
-| `--vcd-password` / `VCD_PASSWORD` | yes | |
-| `--vcd-insecure` | no | Skip TLS verify |
-| `--cluster-id` / `CLUSTER_ID` | yes | The exact string the CPI uses in object names, e.g. `capvcdCluster:bc77c367-…` |
-| `--edge-gateway-id` / `EDGE_GATEWAY_ID` | yes (unless `--skip-dnat`) | `urn:vcloud:gateway:<uuid>` |
-| `--interval` | no | Default `60s` |
-| `--dry-run` | no | Logs orphans without deleting. **Start here.** |
-| `--skip-dnat` | no | Set when CPI is in `enableVirtualServiceSharedIP=true` mode |
-| `--disable-leader-election` | no | Single-replica mode |
+See [`args.md`](args.md) for all flags, secret values, and how to extract them from the cluster.
 
 ## Deploy
 
