@@ -1,4 +1,4 @@
-module kubedb.dev/vcd-lb-gc
+module kubeops.dev/vcd-lb-gc
 
 go 1.22.0
 

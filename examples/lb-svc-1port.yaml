@@ -1,0 +1,16 @@
+# lb-test v1 — single port (http:80). Apply this to remove the http-alt port
+# and strand its VCD objects (the orphan the controller cleans up).
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb-test
+  namespace: vcd
+spec:
+  type: LoadBalancer
+  selector:
+    app: app-a
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP

@@ -55,11 +55,16 @@ kubectl apply -f deploy/secret.yaml
 kubectl apply -f deploy/deployment.yaml
 
 # Watch the dry-run output before flipping it off.
-kubectl -n kube-system logs deploy/vcd-lb-gc -f
+kubectl -n vcd logs deploy/vcd-lb-gc -f
 ```
 
 Once the dry-run logs match what you expect to delete, remove `--dry-run=true`
 from `deploy/deployment.yaml` and reapply.
+
+## Test
+
+See [`TEST.md`](TEST.md) for how to reproduce the orphan bug and verify the
+controller cleans it up — local build checks plus a full end-to-end run.
 
 ## Safety
 
