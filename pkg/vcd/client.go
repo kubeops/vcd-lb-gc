@@ -181,20 +181,40 @@ type NATRule struct {
 	DnatExternalPort  string `json:"dnatExternalPort,omitempty"`
 }
 
-// ListVirtualServices returns every virtual service whose name starts with prefix.
-// Uses FIQL filter on name to keep the result small.
-func (c *Client) ListVirtualServices(ctx context.Context, namePrefix string) ([]VirtualService, error) {
-	return paged[VirtualService](ctx, c, "/cloudapi/1.0.0/loadBalancer/virtualServices", namePrefix)
+// ListVirtualServices returns every virtual service on the given edge gateway
+// whose name starts with prefix. The flat /loadBalancer/virtualServices
+// collection is not listable (GET returns 405); listing must go through the
+// gateway-scoped summaries endpoint. Uses FIQL filter on name to keep the
+// result small.
+func (c *Client) ListVirtualServices(ctx context.Context, edgeGatewayID, namePrefix string) ([]VirtualService, error) {
+	path := fmt.Sprintf("/cloudapi/1.0.0/edgeGateways/%s/loadBalancer/virtualServiceSummaries", url.PathEscape(edgeGatewayID))
+	return paged[VirtualService](ctx, c, path, namePrefix)
 }
 
-func (c *Client) ListPools(ctx context.Context, namePrefix string) ([]Pool, error) {
-	return paged[Pool](ctx, c, "/cloudapi/1.0.0/loadBalancer/pools", namePrefix)
+func (c *Client) ListPools(ctx context.Context, edgeGatewayID, namePrefix string) ([]Pool, error) {
+	path := fmt.Sprintf("/cloudapi/1.0.0/edgeGateways/%s/loadBalancer/poolSummaries", url.PathEscape(edgeGatewayID))
+	return paged[Pool](ctx, c, path, namePrefix)
 }
 
-// ListNATRules lists NAT rules on a specific edge gateway.
+// ListNATRules lists NAT rules on a specific edge gateway. The NAT endpoint
+// rejects server-side FIQL filtering on name, so we pull the full set and
+// filter by prefix client-side.
 func (c *Client) ListNATRules(ctx context.Context, edgeGatewayID, namePrefix string) ([]NATRule, error) {
 	path := fmt.Sprintf("/cloudapi/1.0.0/edgeGateways/%s/nat/rules", url.PathEscape(edgeGatewayID))
-	return paged[NATRule](ctx, c, path, namePrefix)
+	all, err := paged[NATRule](ctx, c, path, "")
+	if err != nil {
+		return nil, err
+	}
+	if namePrefix == "" {
+		return all, nil
+	}
+	out := all[:0]
+	for _, r := range all {
+		if strings.HasPrefix(r.Name, namePrefix) {
+			out = append(out, r)
+		}
+	}
+	return out, nil
 }
 
 func paged[T any](ctx context.Context, c *Client, path, namePrefix string) ([]T, error) {

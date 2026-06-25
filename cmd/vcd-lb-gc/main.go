@@ -58,8 +58,8 @@ func main() {
 	if *clusterID == "" {
 		fatal(`--cluster-id is required, e.g. "capvcdCluster:<uuid>"`)
 	}
-	if *edgeGwID == "" && !*skipDNAT {
-		fatal("--edge-gateway-id is required unless --skip-dnat is set")
+	if *edgeGwID == "" {
+		fatal("--edge-gateway-id is required (needed to list virtual services and pools, not just DNAT rules)")
 	}
 
 	restCfg, err := loadKubeConfig(*kubeconfig)
@@ -134,6 +134,10 @@ func loadKubeConfig(path string) (*rest.Config, error) {
 }
 
 func defaultKubeconfig() string {
+	// Return empty string when running in-cluster so rest.InClusterConfig() is used.
+	if _, err := os.Stat("/var/run/secrets/kubernetes.io/serviceaccount/token"); err == nil {
+		return ""
+	}
 	if h, _ := os.UserHomeDir(); h != "" {
 		return filepath.Join(h, ".kube", "config")
 	}

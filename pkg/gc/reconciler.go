@@ -84,11 +84,11 @@ func (r *Reconciler) reconcile(ctx context.Context) error {
 
 	// We can't filter by "contains" cheaply, so pull the prefix bucket and
 	// filter client-side for cluster ID match.
-	vsList, err := r.VCD.ListVirtualServices(ctx, vsPrefix)
+	vsList, err := r.VCD.ListVirtualServices(ctx, r.Opts.EdgeGatewayID, vsPrefix)
 	if err != nil {
 		return fmt.Errorf("list virtual services: %w", err)
 	}
-	poolList, err := r.VCD.ListPools(ctx, poolPrefix)
+	poolList, err := r.VCD.ListPools(ctx, r.Opts.EdgeGatewayID, poolPrefix)
 	if err != nil {
 		return fmt.Errorf("list pools: %w", err)
 	}
