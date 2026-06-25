@@ -8,9 +8,9 @@ All values below are for the **kube22-dbaas01** cluster (`vcloud-ccm-configmap`)
 
 | Key | Value | How to find |
 |-----|-------|-------------|
-| `VCD_ENDPOINT` | `https://vcd-ng.cloud.de-novo.biz` | `kubectl get cm vcloud-ccm-configmap -n kube-system -o jsonpath='{.data.vcloud-ccm-config\.yaml}' \| grep host` |
+| `VCD_ENDPOINT` | `https://vcd.example.com` | `kubectl get cm vcloud-ccm-configmap -n kube-system -o jsonpath='{.data.vcloud-ccm-config\.yaml}' \| grep host` |
 | `VCD_ORG` | `dbaas` | same configmap → `org:` field |
-| `VCD_USER` | `pakholoks` | `kubectl get secret vcloud-basic-auth -n kube-system -o jsonpath='{.data.username}' \| base64 -d` → strip the `org/` prefix (`dbaas/pakholoks` → `pakholoks`) |
+| `VCD_USER` | `<vcd-user>` | `kubectl get secret vcloud-basic-auth -n kube-system -o jsonpath='{.data.username}' \| base64 -d` → strip the `org/` prefix (`dbaas/<vcd-user>` → `<vcd-user>`) |
 | `VCD_PASSWORD` | *(your password)* | known to the operator |
 
 ---

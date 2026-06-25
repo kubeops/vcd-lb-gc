@@ -1,0 +1,20 @@
+curl 'https://vcd.example.com/cloudapi/1.0.0/edgeGateways/urn:vcloud:gateway:cb64f385-38ee-4a1f-b954-866e087a5094/loadBalancer/virtualServiceSummaries?page=1&pageSize=15&sortAsc=name&links=true' \
+  -H 'Accept: application/json;version=40.0.0-alpha' \
+  -H 'Accept-Language: en-US,en;q=0.9,bn;q=0.8' \
+  -H 'Authorization: Bearer <VCD_JWT_TOKEN>' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Type: application/json' \
+  -b 'vcloud_jwt=<VCD_JWT_TOKEN>; vcloud_session_id=<VCD_SESSION_TOKEN>' \
+  -H 'Pragma: no-cache' \
+  -H 'Referer: https://vcd.example.com/tenant/dbaas/domain-networking/org-edge-gateways/cloud/urn:vcloud:gateway:cb64f385-38ee-4a1f-b954-866e087a5094/load-balancer/virtual-services' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Site: same-origin' \
+  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36' \
+  -H 'X-VMWARE-VCLOUD-AUTH-CONTEXT: dbaas' \
+  -H 'X-VMWARE-VCLOUD-TENANT-CONTEXT: fcf0ada0-daa3-48dd-bda8-4a8efa15318a' \
+  -H 'X-vCloud-Authorization: <VCD_SESSION_TOKEN>' \
+  -H 'sec-ch-ua: "Google Chrome";v="149", "Chromium";v="149", "Not)A;Brand";v="24"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "macOS"'
